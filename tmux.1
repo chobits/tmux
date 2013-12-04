@@ -1151,6 +1151,7 @@ This command works only if at least one client is attached.
 .It Xo
 .Ic choose-list
 .Op Fl l Ar items
+.Op Fl d Ar delim
 .Op Fl t Ar target-window
 .Op Ar template
 .Xc
@@ -1159,6 +1160,9 @@ Put a window into list choice mode, allowing
 to be selected.
 .Ar items
 can be a comma-separated list to display more than one item.
+You can use
+.Ar delim
+to separate list instead of default comma delimiter.
 If an item has spaces, that entry must be quoted.
 After an item is chosen,
 .Ql %%

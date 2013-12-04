@@ -35,8 +35,8 @@ enum cmd_retval cmd_choose_list_exec(struct cmd *, struct cmd_q *);
 
 const struct cmd_entry cmd_choose_list_entry = {
 	"choose-list", NULL,
-	"l:t:", 0, 1,
-	"[-l items] " CMD_TARGET_WINDOW_USAGE "[template]",
+	"l:d:t:", 0, 1,
+	"[-l items] [-d delim] " CMD_TARGET_WINDOW_USAGE "[template]",
 	0,
 	NULL,
 	cmd_choose_list_exec
@@ -48,7 +48,7 @@ cmd_choose_list_exec(struct cmd *self, struct cmd_q *cmdq)
 	struct args			*args = self->args;
 	struct client			*c;
 	struct winlink			*wl;
-	const char			*list1;
+	const char			*list1, *delim;
 	char				*template, *item, *copy, *list;
 	u_int				 idx;
 
@@ -59,6 +59,9 @@ cmd_choose_list_exec(struct cmd *self, struct cmd_q *cmdq)
 
 	if ((list1 = args_get(args, 'l')) == NULL)
 		return (CMD_RETURN_ERROR);
+
+	if ((delim = args_get(args, 'd')) == NULL)
+		delim = ",";
 
 	if ((wl = cmd_find_window(cmdq, args_get(args, 't'), NULL)) == NULL)
 		return (CMD_RETURN_ERROR);
@@ -73,7 +76,7 @@ cmd_choose_list_exec(struct cmd *self, struct cmd_q *cmdq)
 
 	copy = list = xstrdup(list1);
 	idx = 0;
-	while ((item = strsep(&list, ",")) != NULL)
+	while ((item = strsep(&list, delim)) != NULL)
 	{
 		if (*item == '\0') /* no empty entries */
 			continue;
